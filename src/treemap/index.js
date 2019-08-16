@@ -11,7 +11,7 @@ export default class Treemap {
   create () {
     var currentTreemap = document.getElementById(this.elementID)
     this.width = currentTreemap.offsetWidth
-    this.height = currentTreemap.offsetHeight
+    this.height = currentTreemap.offsetWidth * 0.55
     this.middle = currentTreemap.getBoundingClientRect().x + this.width / 2.0
     currentTreemap.innerHTML = ''
 
@@ -49,6 +49,7 @@ export default class Treemap {
       if (data.cells[i]['_value'] > 0) {
         root.children.push({
           name: data.cells[i]['_label'],
+          code: data.cells[i]['_code'],
           value: data.cells[i]['_value'],
           value_fmt: data.cells[i]['_value_fmt'],
           percentage: data.cells[i]['_percentage'],
@@ -80,10 +81,10 @@ export default class Treemap {
             .style('background', '#fff')
             .classed('big', function (d) { return d.value > data.summary._value / 50 })
             .html(function (d) {
-              if (d.percentage < 0.05) {
+              if (d.percentage < 0.03) {
                 return ''
               }
-              return d.children ? null : '<span><span class="amount">' + d.value_fmt + '</span>' + d.name + '</span>'
+              return d.children ? null : '<span><span class="amount">' + d.name + ' (' + d.code + ')</span>' + d.value_fmt + '</span>'
             })
             .on('mouseover', function (d) {
               d3.select(this).transition().duration(300)
