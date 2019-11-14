@@ -12,7 +12,9 @@ export default class Treemap {
     var currentTreemap = document.getElementById(this.elementID)
     this.width = currentTreemap.offsetWidth
     this.height = currentTreemap.offsetWidth * 0.55
-    this.middle = currentTreemap.getBoundingClientRect().x + this.width / 2.0
+    this.middle = this.width / 2.0
+    console.log(this.width, currentTreemap.getBoundingClientRect().x, this.middle)
+    console.log(currentTreemap)
     currentTreemap.innerHTML = ''
 
     this.treemap = d3.layout.treemap()

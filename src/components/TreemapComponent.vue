@@ -491,14 +491,24 @@ export default {
     },
 
     formatCode: function (code) {
+      console.log(this.selectedHierarchy.hierarchy.label)
+      var firstLevel = this.selectedHierarchy.levelsParams[0]?this.selectedHierarchy.levelsParams[0]:null
       var codeS = String(code)
+      console.log(firstLevel)
       if (codeS.length === 4) {
         return codeS.slice(0, 2) + ' ' + codeS.slice(2, 4)
       } else if (codeS.length === 5) {
         return codeS.slice(0, 3) + ' ' + codeS.slice(3, 5)
+      } else if (this.hierarqUrl === 'administrative_classification' && codeS.length === 3)  {
+        return '0' + codeS.slice(0, 1) + ' ' + codeS.slice(1, 3)
+      } else if (firstLevel === '0')  {
+        return '0' + codeS
+      } else if (this.hierarqUrl === 'administrative_classification' && codeS.length === 1) {
+        return '0' + codeS
       } else {
         return codeS
       }
+
     },
 
     getData: function ($event) {
@@ -525,13 +535,13 @@ export default {
 
         // Calculate total amount to use it in percentual calculations
         this.data['summary']['_value'] = 0
-        for (i in this.data['cells']) {
+        for (var i = 0; i < this.data['cells'].length; ++i) {
           total += this.data['cells'][i][this.config['value'][this.selectedMeasure]['field']]
           this.data['summary']['_value'] = total
         }
         this.data['summary']['_valueFmt'] = this.formatValue(this.data['summary']['_value'], this.config['value'][this.selectedMeasure]['formatOptions'])
 
-        for (var i in this.data['cells']) {
+        for (i = 0; i < this.data['cells'].length; ++i) {
           var levelsParams = ''
           var filters = qs.stringify(this.filters)
           if (filters !== '') {
@@ -588,6 +598,11 @@ export default {
         this.addFilters()
       },
       deep: true
+    },
+    'hierarqUrl': {
+      'handler': function () {
+        this.changeHierarqUrl()
+      }
     }
   }
 }
